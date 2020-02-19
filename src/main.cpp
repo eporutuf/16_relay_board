@@ -26,6 +26,7 @@ Endpoint recv_addr;
 void f_ethernet_init();
 void set_ip();
 void action_relay(char *payload);
+void ack_relay(char *payload);
 
 int ret = -1;
 int ret_set = -1;
@@ -61,6 +62,7 @@ int main()
             pc.printf("[%d]recv[%s]:[%d] : %s \n", r_result, recv_addr.get_address(), recv_addr.get_port(), buff);
 
             action_relay(buff);
+            ack_relay(buff);
         }
     }
     wait(1);
@@ -117,22 +119,32 @@ void set_ip()
 
 void action_relay(char *payload)
 {
-    pc.printf("Payload is : %s \n", payload);
+    //pc.printf("Payload is : %s \n", payload);
     //scanf("%s",payload);
     int l = strlen(payload) - 1;
-    pc.printf("Length == %d \n", l);
+    //pc.printf("Length == %d \n", l);
     int relay = (payload[2] - 48) * 10 + (payload[3] - 48);
     int etat = payload[5] - 48;
-    pc.printf("Numero Relay === %d \n", relay);
-    pc.printf("Etat Relay = %d", etat);
-    pc.printf("_____________________________ \r\n");
+    //pc.printf("Numero Relay === %d \n", relay);
+    //pc.printf("Etat Relay = %d", etat);
+    //pc.printf("_____________________________ \r\n");
     if(etat == 0)
     {
         coil = (0);
     }
     else if (etat == 1)
     {
-        pc.printf("Coil Value = %d",(pow(2,(relay -1))) );
+        //pc.printf("Coil Value = %d",(pow(2,(relay -1))) );
         coil = (pow(2,(relay -1)));
     }
+}
+
+void ack_relay(char *payload)
+{
+
+    char ack[100] = "1"; 
+    strcat(ack,payload);
+    int l = strlen(ack) - 1;
+    pc.printf("Payload is : %s \n", ack);
+    client.sendTo(recv_addr,ack,l);
 }
