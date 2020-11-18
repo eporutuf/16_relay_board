@@ -9,7 +9,7 @@
 #define AUTO_OFF 0
 #define SAMPLE_SIZE 250
 
-char IP_Addr[30] = "192.168.1.";
+char IP_Addr[30] = "172.16.10.";
 const char *IP_Subnet = "255.255.255.0";
 const char *IP_Gateway = "192.168.1.87";
 
@@ -127,7 +127,7 @@ void set_ip()
     int value = addr.read();
     if (value == 0 || value == 1)
         value = 2;
-    sprintf(IP_Addr, "192.168.1.%d", value);
+    sprintf(IP_Addr, "172.16.10.%d", value);
     mac[5] = value;
 }
 
